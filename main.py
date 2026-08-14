@@ -1,3 +1,4 @@
+import random
 LINE_DOUBLE = '================================='
 LINE_SINGLE = '---------------------------------'
 EMPTY = ' '
@@ -45,6 +46,22 @@ def color_symbol(symbol):
         return f"{O_COLOR}O{RESET}"
     return symbol
 
+def choose_game_mode():
+    while True:
+        print("1. Player vs Player")
+        print("2. Player vs AI")
+        choice = input("Choose game mode (1/2): ")
+        if choice in ['1', '2']:
+            return choice
+        else:
+            print("Wrong input, please choose 1 or 2!")
+
+
+
+def make_ai_move(board):
+    available_positions = [pos_index for pos_index in range(9) if board[pos_index] == EMPTY]
+    board[random.choice(available_positions)] = 'O'
+
 def make_move(board, player):
     while True:
         position = input(f"Player {player}, choose a position (1-9): ")
@@ -64,13 +81,19 @@ def check_winner(board, player):
             return True
     return False
 
-
-def play_round(score):
+def play_round(score, game_mode):
     board = create_board()
     current_player = 'X'
     while True:
-        display_board(board)
-        make_move(board, current_player)
+        if game_mode == '1':
+            display_board(board)
+            make_move(board, current_player)
+        else:
+            if current_player == 'X':
+                display_board(board)
+                make_move(board, current_player)
+            else:
+                make_ai_move(board)
         if check_winner(board, current_player):
             score[current_player] += 1
             display_header(f"PLAYER {current_player} WINS!")
@@ -83,6 +106,7 @@ def play_round(score):
             break
         current_player = 'O' if current_player == 'X' else 'X'
 
+
 def play_game():
 
     score = {
@@ -90,9 +114,10 @@ def play_game():
         'O': 0,
         'Draws': 0
     }
+    display_header('TIC TAC TOE!')
+    game_mode = choose_game_mode()
     while True:
-        display_header('TIC TAC TOE!')
-        play_round(score)
+        play_round(score, game_mode)
         display_score(score)
         if input('Play again? (y/n): ').lower() != 'y':
             break
