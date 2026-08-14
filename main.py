@@ -1,3 +1,8 @@
+LINE_DOUBLE = '================================='
+LINE_SINGLE = '---------------------------------'
+X_COLOR = '\033[91m'
+O_COLOR = '\033[94m'
+RESET = '\033[0m'
 WINNING_COMBINATIONS = [
         [0, 1, 2],
         [3, 4, 5],
@@ -9,13 +14,37 @@ WINNING_COMBINATIONS = [
         [2, 4, 6],
     ]
 
+def display_score(score):
+    print(LINE_SINGLE)
+    print('              SCORE')
+    print(LINE_SINGLE)
+    print(f"    X: {score['X']}     O: {score['O']}     Draws: {score['Draws']}")
+    print(LINE_SINGLE)
+
+def display_header(text):
+    print(LINE_DOUBLE)
+    print(f'           {text}')
+    print(LINE_DOUBLE)
+
 def display_board(board):
     horizontal_line = '---+---+---'
-    print(f'\n {board[0]} | {board[1]} | {board[2]}')
-    print(horizontal_line)
-    print(f' {board[3]} | {board[4]} | {board[5]}')
-    print(horizontal_line)
-    print(f' {board[6]} | {board[7]} | {board[8]}\n')
+    print(f'\n            {color_symbol(board[0])} | {color_symbol(board[1])} | {color_symbol(board[2])}')
+    print(f'           {horizontal_line}')
+    print(f'            {color_symbol(board[3])} | {color_symbol(board[4])} | {color_symbol(board[5])}')
+    print(f'           {horizontal_line}')
+    print(f'            {color_symbol(board[6])} | {color_symbol(board[7])} | {color_symbol(board[8])}\n')
+
+def create_board():
+    return [' ', ' ', ' ',
+             ' ', ' ', ' ',
+             ' ', ' ', ' ']
+
+def color_symbol(symbol):
+    if symbol == 'X':
+        return f"{X_COLOR}X{RESET}"
+    elif symbol == 'O':
+        return f"{O_COLOR}O{RESET}"
+    return symbol
 
 def make_move(board, player):
     while True:
@@ -36,25 +65,38 @@ def check_winner(board, player):
             return True
     return False
 
-def play_game():
 
-    board = [' ', ' ', ' ',
-             ' ', ' ', ' ',
-             ' ', ' ', ' ']
-
-    print("Welcome to Tic Tac Toe!")
-    display_board(board)
+def play_round(score):
+    board = create_board()
     current_player = 'X'
     while True:
-        make_move(board, current_player)
         display_board(board)
+        make_move(board, current_player)
         if check_winner(board, current_player):
-            print(f'Player {current_player} wins!')
+            score[current_player] += 1
+            display_header(f"PLAYER {current_player} WINS!")
+            display_board(board)
             break
         elif ' ' not in board:
-            print("It's a draw!")
+            score['Draws'] += 1
+            display_header("IT'S A DRAW!")
+            display_board(board)
             break
         current_player = 'O' if current_player == 'X' else 'X'
+
+def play_game():
+
+    score = {
+        'X': 0,
+        'O': 0,
+        'Draws': 0
+    }
+    while True:
+        display_header('TIC TAC TOE!')
+        play_round(score)
+        display_score(score)
+        if input('Play again? (y/n): ').lower() != 'y':
+            break
 
 if __name__ == '__main__':
     play_game()
