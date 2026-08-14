@@ -1,5 +1,6 @@
 LINE_DOUBLE = '================================='
 LINE_SINGLE = '---------------------------------'
+EMPTY = ' '
 X_COLOR = '\033[91m'
 O_COLOR = '\033[94m'
 RESET = '\033[0m'
@@ -35,9 +36,7 @@ def display_board(board):
     print(f'            {color_symbol(board[6])} | {color_symbol(board[7])} | {color_symbol(board[8])}\n')
 
 def create_board():
-    return [' ', ' ', ' ',
-             ' ', ' ', ' ',
-             ' ', ' ', ' ']
+    return [EMPTY] * 9
 
 def color_symbol(symbol):
     if symbol == 'X':
@@ -51,7 +50,7 @@ def make_move(board, player):
         position = input(f"Player {player}, choose a position (1-9): ")
         if position.isdigit() and 1 <= int(position) <= 9:
             index = int(position) - 1
-            if board[index] == ' ':
+            if board[index] == EMPTY:
                 board[index] = player
                 break
             else:
@@ -77,7 +76,7 @@ def play_round(score):
             display_header(f"PLAYER {current_player} WINS!")
             display_board(board)
             break
-        elif ' ' not in board:
+        elif EMPTY not in board:
             score['Draws'] += 1
             display_header("IT'S A DRAW!")
             display_board(board)
