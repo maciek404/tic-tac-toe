@@ -57,10 +57,42 @@ def choose_game_mode():
             print("Wrong input, please choose 1 or 2!")
 
 
-
 def make_ai_move(board):
-    available_positions = [pos_index for pos_index in range(9) if board[pos_index] == EMPTY]
-    board[random.choice(available_positions)] = 'O'
+    move = find_winning_move(board, 'O')
+    if move is not None:
+        board[move] = 'O'
+    else:
+        move = find_winning_move(board, 'X')
+        if move is not None:
+            board[move] = 'O'
+        else:
+            move = find_preferred_move(board)
+            if move is not None:
+                board[move] = 'O'
+            else:
+                available_positions = [pos_index for pos_index in range(9) if board[pos_index] == EMPTY]
+                board[random.choice(available_positions)] = 'O'
+
+def find_winning_move(board, player):
+    for comb in WINNING_COMBINATIONS:
+        if board[comb[0]] == player and board[comb[1]] == player and board[comb[2]] == EMPTY:
+            return comb[2]
+        elif board[comb[1]] == player and board[comb[2]] == player and board[comb[0]] == EMPTY:
+            return comb[0]
+        elif board[comb[0]] == player and board[comb[2]] == player and board[comb[1]] == EMPTY:
+            return comb[1]
+
+def find_preferred_move(board):
+    all_corners = [0, 2, 6, 8]
+    empty_corners = []
+    if board[4] == EMPTY:
+        return 4
+    for corner in all_corners:
+        if board[corner] == EMPTY:
+            empty_corners.append(corner)
+    if empty_corners:
+        return random.choice(empty_corners)
+    return None
 
 def make_move(board, player):
     while True:

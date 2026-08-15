@@ -2,13 +2,18 @@
 
 A command-line Tic Tac Toe game written in Python.
 
-The project started as a simple two-player Tic Tac Toe game and has been gradually improved with a colored terminal interface, score tracking, multiple rounds, game mode selection, and a basic AI opponent.
+The project started as a simple two-player Tic Tac Toe game and has been gradually improved with a colored terminal interface, score tracking, multiple rounds, game mode selection, and a rule-based AI opponent.
 
 ## Features
 
 - Player vs Player mode
 - Player vs AI mode
-- Random AI opponent
+- Rule-based AI opponent
+- AI can identify winning moves
+- AI can block the player's winning move
+- AI prioritizes the center position
+- AI prioritizes corner positions
+- Random fallback move when no strategic move is available
 - Input validation
 - Detection of wins and draws
 - Multiple rounds
@@ -16,6 +21,27 @@ The project started as a simple two-player Tic Tac Toe game and has been gradual
 - Colored X and O symbols in the terminal
 - Simple command-line interface
 - Replay option after each round
+
+## AI Strategy
+
+The AI currently follows a simple priority-based strategy:
+
+1. **Win if possible**  
+   The AI checks whether it can complete a winning combination.
+
+2. **Block the player**  
+   If the player is one move away from winning, the AI blocks the winning position.
+
+3. **Take the center**  
+   If the center position is available, the AI chooses it.
+
+4. **Choose a corner**  
+   If the center is occupied, the AI chooses randomly from the available corners.
+
+5. **Random fallback**  
+   If no preferred move is available, the AI chooses randomly from the remaining positions.
+
+This approach makes the AI more strategic than a purely random opponent while keeping the implementation simple and easy to understand.
 
 ## Game Modes
 
@@ -27,7 +53,7 @@ Two players take turns playing as X and O.
 
 The player controls X while the computer controls O.
 
-The current AI uses a simple random strategy: it selects one of the available positions at random.
+The AI analyzes the current board before making its move and follows the strategy described above.
 
 ## How to Play
 
@@ -84,10 +110,14 @@ This project was created as part of my Python learning journey and helped me pra
 - User input and validation
 - String formatting
 - ANSI terminal colors
-- `random` module
+- The `random` module
 - `random.choice()`
+- Returning values from functions
+- `None` and `is not None`
 - Passing data between functions
 - Basic recursion concepts
+- Game state management
+- Rule-based decision making
 - Program structure and code organization
 - Git and GitHub workflow
 
@@ -95,13 +125,13 @@ This project was created as part of my Python learning journey and helped me pra
 
 Possible future versions may include:
 
-- Smarter AI decision-making
-- AI that can block the player's winning move
-- AI that can identify winning moves
+- More advanced AI decision-making
+- AI fork detection
 - Different AI difficulty levels
 - Unbeatable AI using the Minimax algorithm
 - Improved user interface
 - Further code refactoring
+- Unit tests
 
 ## Technologies
 
